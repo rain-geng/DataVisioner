@@ -45,6 +45,7 @@
   </el-form-item>
 </template>
 <script>
+import store from '@/store'
 import { getFilterOperator, dataType } from '@/utils/configs'
 import { buildFilterSentence } from '@/utils/buildSentence'
 
@@ -55,7 +56,8 @@ export default {
     },
     filters: {
       type: Array
-    }
+    },
+    allCols: Array
   },
   data() {
     return {
@@ -72,15 +74,12 @@ export default {
     }
   },
   computed: {
-    allCols() {
-      return this.$store.state.chart.allCols
-    },
     currentOperatorParamNum() {
       const a = getFilterOperator().find(item => item.operator === this.filterOperator)
       return a ? a.paramNum : 1
     },
     lang() {
-      return this.$store.state.app.lang
+      return store?.state?.app?.lang
     }
   },
   watch: {

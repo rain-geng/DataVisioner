@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import store from '@/store'
 import { langList } from '@/lang'
 
 export default {
@@ -21,10 +22,10 @@ export default {
   computed: {
     lang: {
       get() {
-        return this.$store.state.app.lang
+        return store.state.app.lang
       },
       set(value) {
-        this.$store.commit('app/SET_LANG', value)
+        store.commit('app/SET_LANG', value)
       }
     },
     langObj() {

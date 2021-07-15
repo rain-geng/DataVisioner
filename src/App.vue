@@ -53,6 +53,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import store from '@/store'
 import i18n from '@/components/i18n'
 
 export default {
@@ -74,7 +75,7 @@ export default {
   },
   methods: {
     logout() {
-      this.$store.dispatch('user/FedLogOut').then(() => {
+      store.dispatch('user/FedLogOut').then(() => {
         location.reload()// In order to re-instantiate the vue-router object to avoid bugs
       })
     },

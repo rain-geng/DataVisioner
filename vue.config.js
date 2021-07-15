@@ -5,11 +5,12 @@ function resolve(dir) {
 }
 
 module.exports = {
+  lintOnSave: false,
   devServer: {
     disableHostCheck: true,
     proxy: {
-      '^/api': {
-        target: 'http://localhost:8000'
+      '/api': {
+        target: 'https://api.v11nlab.com/'
       }
     }
   },

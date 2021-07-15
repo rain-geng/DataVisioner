@@ -30,6 +30,7 @@
   </div>
 </template>
 <script>
+import store from '@/store'
 import { sourceList, linkedTablesByBase } from '@/api/source'
 import draggable from 'vuedraggable'
 import exeSql from '@/api/exeSql'
@@ -58,10 +59,10 @@ export default {
   },
   computed: {
     caculCols() {
-      return this.$store.state.chart.caculCols
+      return store.state.chart.caculCols
     },
     dimensions() {
-      return this.$store.state.chart.dimensions
+      return store.state.chart.dimensions
     },
     allSelected() {
       return this.dimensions.concat(this.caculCols)
@@ -112,7 +113,7 @@ export default {
     handleDataSrcChange() {
       this.dataSrcVisible = false
       this.fetchSchema()
-      this.$store.commit('chart/SET_ALL_COLS', [])
+      store.commit('chart/SET_ALL_COLS', [])
       this.$emit('change', {
         table: this.selectedTable,
         source_id: this.selectedBase
@@ -134,7 +135,7 @@ export default {
             id: index
           }
         })
-        this.$store.commit('chart/SET_ALL_COLS', this.tableSchema)
+        store.commit('chart/SET_ALL_COLS', this.tableSchema)
       })
     },
     handleMove(evt, originalEvent) {

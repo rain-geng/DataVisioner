@@ -9,6 +9,7 @@
   </el-form-item>
 </template>
 <script>
+import store from '@/store'
 import draggable from 'vuedraggable'
 
 export default {
@@ -26,10 +27,10 @@ export default {
   },
   computed: {
     caculCols() {
-      return this.$store.state.chart.caculCols
+      return store.state.chart.caculCols
     },
     dimensions() {
-      return this.$store.state.chart.dimensions
+      return store.state.chart.dimensions
     },
     allSelected() {
       return this.dimensions.concat(this.caculCols)

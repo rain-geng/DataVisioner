@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import store from '@/store'
 import lineChart from '@/widgets/lineChart'
 import DataTable from '@/widgets/DataTable'
 import BarChart from '@/widgets/BarChart'
@@ -58,10 +59,10 @@ export default {
   },
   computed: {
     caculCols() {
-      return this.$store.state.chart.caculCols
+      return store.state.chart.caculCols
     },
     dimensions() {
-      return this.$store.state.chart.dimensions
+      return store.state.chart.dimensions
     },
     allSelected() {
       return this.dimensions.concat(this.caculCols)

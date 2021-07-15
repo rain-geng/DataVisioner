@@ -61,8 +61,7 @@
     }
   },
   "browserslist": [
-    "> 1%",
-    "last 2 versions"
+    "chrome 78"
   ],
   "bugs": {
     "url": "https://github.com/dongsuo/vue-data-board/issues"

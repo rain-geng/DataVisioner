@@ -50,7 +50,7 @@
 
             <orderPanel v-model="orderByStrs" />
 
-            <filterPanel :filters.sync="currentFilters" :disabled="!allSelected || allSelected.length===0" @change="handleAddFilter" />
+            <filterPanel :filters.sync="currentFilters" :disabled="!allSelected || allSelected.length===0" :all-cols="store.state.chart.allCols" @change="handleAddFilter" />
 
             <el-form-item>
               <div class="limit-input">
@@ -124,6 +124,7 @@
   </div>
 </template>
 <script>
+import store from '@/store'
 import draggable from 'vuedraggable'
 import Driver from 'driver.js' // import driver.js
 import 'driver.js/dist/driver.min.css' // import driver.js css
@@ -148,6 +149,7 @@ export default {
   components: { visualizePanel, dataPanel, draggable, filterPanel, orderPanel },
   data() {
     return {
+      store,
       loading: false,
       result: [],
       dataSrc: {},
@@ -171,17 +173,17 @@ export default {
   computed: {
     caculCols: {
       get() {
-        return this.$store.state.chart.caculCols
+        return store.state.chart.caculCols
       }, set(value) {
-        this.$store.commit('chart/SET_CACUL_COLS', value)
+        store.commit('chart/SET_CACUL_COLS', value)
       }
     },
     dimensions: {
       get() {
-        return this.$store.state.chart.dimensions
+        return store.state.chart.dimensions
       },
       set(value) {
-        this.$store.commit('chart/SET_DIMENSIONS', value)
+        store.commit('chart/SET_DIMENSIONS', value)
       }
     },
     allSelected() {
@@ -221,15 +223,15 @@ export default {
             this.limit = content.limit || 200
             this.currentFilters = content.filters
             this.orderByStrs = content.orderByStrs
-            this.$store.commit('chart/SET_CACUL_COLS', content.selectedCalcul)
-            this.$store.commit('chart/SET_DIMENSIONS', content.selectedDimension)
+            store.commit('chart/SET_CACUL_COLS', content.selectedCalcul)
+            store.commit('chart/SET_DIMENSIONS', content.selectedDimension)
             this.$refs.dataPanel.initWithDataSrc(this.dataSrc)
           })
         } else {
           this.chartName = undefined
           this.chartDesc = undefined
-          this.$store.commit('chart/SET_CACUL_COLS', [])
-          this.$store.commit('chart/SET_DIMENSIONS', [])
+          store.commit('chart/SET_CACUL_COLS', [])
+          store.commit('chart/SET_DIMENSIONS', [])
           this.$nextTick(() => {
             this.$refs.dataPanel.initWithDataSrc()
           })
@@ -251,26 +253,26 @@ export default {
     },
     handleDataSrcChange(value) {
       this.dataSrc = value
-      this.$store.commit('chart/SET_CACUL_COLS', [])
-      this.$store.commit('chart/SET_DIMENSIONS', [])
+      store.commit('chart/SET_CACUL_COLS', [])
+      store.commit('chart/SET_DIMENSIONS', [])
       this.filterStr = undefined
       this.orderByStrs = []
     },
     handleColChange(evt) {
       if (evt.added) {
-        this.$store.commit('chart/ADD_CACUL_COL', evt.added.element)
+        store.commit('chart/ADD_CACUL_COL', evt.added.element)
       }
     },
     handleDimensionChange(evt) {
       if (evt.added) {
-        this.$store.commit('chart/ADD_DIMENSION_COL', evt.added.element)
+        store.commit('chart/ADD_DIMENSION_COL', evt.added.element)
       }
     },
     handleCloseColTag(col) {
-      this.$store.commit('chart/DELETE_CACUL_COL', col)
+      store.commit('chart/DELETE_CACUL_COL', col)
     },
     handleCloseDimensionTag(col) {
-      this.$store.commit('chart/DELETE_DIMENSION_COL', col)
+      store.commit('chart/DELETE_DIMENSION_COL', col)
     },
     handleAddFilter(value) {
       this.filterStr = value

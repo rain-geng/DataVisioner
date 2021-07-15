@@ -82,25 +82,23 @@ export default {
       this.loading = true
       dashboardList().then(resp => {
         this.loading = false
-        this.dashboardList = []
-        resp.data.order.forEach((id, index) => {
-          const itemIndex = resp.data.dashboards.findIndex(item => item.dashboard_id === id)
-          if (itemIndex >= 0) {
-            this.dashboardList.push(resp.data.dashboards[itemIndex])
-            resp.data.dashboards.splice(itemIndex, 1)
-          } else {
-            console.log(id, index)
-          }
-        })
-        this.dashboardList = this.dashboardList.concat(resp.data.dashboards)
-        const dashboard = this.dashboardList.find(item => item.dashboard_id === this.$route.query.id)
-        if (dashboard) {
-          this.currentDashboard = dashboard
-        } else {
+        const keyBy = resp.data.dashboards.reduce((o, e) => (o[e.dashboard_id] = e, o), {})
+        this.dashboardList = resp.data.order.map(e => {
+          const item = keyBy[e]
+          delete keyBy[e]
+          return item
+        }).concat(Object.values(keyBy))
+        //const dashboard = keyBy[this.$route.query.id]
+        //if (dashboard) {
+        //  this.currentDashboard = dashboard
+        //} else {
+          //this.currentDashboard = this.dashboardList[0]
+        //}
+        //if (this.currentDashboard) {
+        //  this.$router.push(`/dashboard?id=${this.currentDashboard.dashboard_id}`).catch(_ => {})
+        //}
+        if (!this.currentDashboard) {
           this.currentDashboard = this.dashboardList[0]
-        }
-        if (this.currentDashboard) {
-          this.$router.push(`/dashboard?id=${this.currentDashboard.dashboard_id}`).catch(_ => {})
         }
       })
     },
@@ -110,8 +108,9 @@ export default {
         return
       }
       // this.$confirm('确定要离开当前页面吗?系统可能不会保存您所做的更改。', '提示').then(() => {
+      //this.currentDashboard = db
+      //this.$router.push(`/dashboard?id=${this.currentDashboard.dashboard_id}`)
       this.currentDashboard = db
-      this.$router.push(`/dashboard?id=${this.currentDashboard.dashboard_id}`)
       // })
     },
     addDashboard() {
