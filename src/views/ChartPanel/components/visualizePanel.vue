@@ -19,17 +19,17 @@
 
 <script>
 import store from '@/store'
-import lineChart from '@/widgets/lineChart'
+import LineChart from '@/widgets/LineChart'
 import DataTable from '@/widgets/DataTable'
 import BarChart from '@/widgets/BarChart'
 import StackBarChart from '@/widgets/StackBarChart'
-import HorizontalBar from '@/widgets/horizontalBar'
+import HorizontalBar from '@/widgets/HorizontalBar'
 import PieChart from '@/widgets/PieChart'
 
 import chartTypeList from '@/utils/chartTypeList'
 
 export default {
-  components: { lineChart, DataTable, BarChart, StackBarChart, PieChart, HorizontalBar },
+  components: { LineChart, DataTable, BarChart, StackBarChart, PieChart, HorizontalBar },
   props: {
     data: {
       type: Array,

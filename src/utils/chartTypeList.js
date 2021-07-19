@@ -56,7 +56,7 @@ const chartTypeList = [
         return (dimensions.length === 1 || dimensions.length === 2) && (calculs.length >= 1)
       }
     },
-    componentName: 'lineChart', dataTransfer
+    componentName: 'LineChart', dataTransfer
   },
   { name: i18n.t('chartType.bar'),
     icon: 'chart_bar',

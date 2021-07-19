@@ -16,4 +16,6 @@ const store = new Vuex.Store({
   getters
 })
 
+store.commit('app/SET_LANG', 'CN')
+
 export default store

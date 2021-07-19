@@ -3,11 +3,11 @@
     <el-card body-style="padding:0;" style="margin-bottom: 20px;" class="panel-header">
       <div slot="header" style="display: flex; justify-content:space-between;">
         <span>
-          <span class="back-button" @click="$router.go(-1)">
+          <!--<span class="back-button" @click="$router.go(-1)">
             <i class="el-icon-back" />
             <span>{{ $t('common.back') }}</span>
-          </span>
-          <span v-if="this.$route.params.id !== 'create'">{{ $t('chart.createNewChart') }}</span>
+          </span>-->
+          <span v-if="this.id !== 'create'">{{ $t('chart.createNewChart') }}</span>
           <span v-else>{{ $t('chart.editChart') }}</span>
           <el-button size="mini" type="text" style="margin-left:10px;" @click="viewAllChart">
             {{ $t('chart.allCharts') }}
@@ -15,9 +15,9 @@
         </span>
         <span>
           <el-button size="mini" type="primary" style="float: right;margin:0 10px 0 0;" icon="el-icon-download" @click="handleDownload" />
-          <el-button v-if="this.$route.params.id !== 'create'" size="mini" type="primary" style="float: right;margin:0 10px 0 0;" @click="handleLinkDB">{{ $t('chart.addToDashboard') }}</el-button>
+          <el-button v-if="this.id !== 'create'" size="mini" type="primary" style="float: right;margin:0 10px 0 0;" @click="handleLinkDB">{{ $t('chart.addToDashboard') }}</el-button>
           <el-button size="mini" type="primary" style="float: right;margin:0 10px 0 0;" icon="el-icon-save" @click="handleSave">{{ $t('common.save') }} </el-button>
-          <el-button v-if="this.$route.params.id !== 'create'" size="mini" type="primary" style="float: right;margin:0 10px 0 0;" @click="$router.replace(`/chartpanel/create`)">{{ $t('chart.createNewChart') }}</el-button>
+          <el-button v-if="this.id !== 'create'" size="mini" type="primary" style="float: right;margin:0 10px 0 0;" @click="navigateTo">{{ $t('chart.createNewChart') }}</el-button>
         </span>
       </div>
     </el-card>
@@ -149,6 +149,7 @@ export default {
   components: { visualizePanel, dataPanel, draggable, filterPanel, orderPanel },
   data() {
     return {
+      id: 'create',
       store,
       loading: false,
       result: [],
@@ -208,11 +209,11 @@ export default {
         this.result = []
       }
     },
-    '$route.params.id': {
+    id: {
       immediate: true,
       handler() {
-        if (this.$route.params.id !== 'create') {
-          getChartById(this.$route.params.id).then(resp => {
+        if (this.id !== 'create') {
+          getChartById(this.id).then(resp => {
             const chart = resp.data
             this.chartName = chart.chart_name
             this.chartDesc = chart.desc
@@ -285,7 +286,7 @@ export default {
         })
         return
       }
-      const chartId = this.$route.params.id === 'create' ? undefined : this.$route.params.id
+      const chartId = this.id === 'create' ? undefined : this.id
       const obj = {
         dataSrc: this.dataSrc.table,
         source_id: this.dataSrc.source_id,
@@ -312,8 +313,7 @@ export default {
         })
       } else {
         createChart(data).then(resp => {
-          // console.log(resp)
-          this.$router.replace(`/chartpanel/${resp.data.id}`)
+          this.navigateTo(resp.data.id)
           this.$message({
             type: 'success',
             message: this.$t('common.saveSuccess')
@@ -323,7 +323,7 @@ export default {
     },
     handleLinkDB() {
       this.showDashboards = true
-      this.getDbByChart(this.$route.params.id)
+      this.getDbByChart(this.id)
       dashboardList().then(resp => {
         this.dashboardList = resp.data.dashboards
       })
@@ -338,12 +338,12 @@ export default {
     },
     linkDb() {
       const data = {
-        chart_id: this.$route.params.id,
+        chart_id: this.id,
         dashboard_id: this.selectedDb
       }
       this.showDashboards = false
       addChartToDB(data).then(resp => {
-        this.getDbByChart(this.$route.params.id)
+        this.getDbByChart(this.id)
         this.$message({
           type: 'success',
           message: this.$t('common.saveSuccess')
@@ -358,15 +358,15 @@ export default {
     },
     switchChart(chart) {
       this.$confirm(this.$t('chart.beforeLeaveConfirm'), this.$t('common.confirm')).then(() => {
-        this.$router.replace(`/chartpanel/${chart.chart_id}`)
+        this.navigateTo(chart.chart_id)
         this.showMyCharts = false
       })
     },
     deleteChart(chart) {
       this.$confirm(this.$t('chart.deleteConfirm', chart.chart_name), this.$t('common.confirm')).then(() => {
         deleteChart({ chart_id: chart.chart_id }).then(() => {
-          if (this.$route.params.id === chart.chart_id) {
-            this.$router.push('/chartpanel/create')
+          if (this.id === chart.chart_id) {
+            this.navigateTo()
             this.showMyCharts = false
           } else {
             this.viewAllChart()
@@ -406,6 +406,9 @@ export default {
           }
         })
       )
+    },
+    navigateTo(id = 'create') {
+      this.id = id
     }
   }
 }

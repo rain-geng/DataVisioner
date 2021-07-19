@@ -8,7 +8,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --modern",
     "lint": "vue-cli-service lint",
-    "analyze": "vue-cli-service build --preview --report"
+    "analyze": "vue-cli-service build --preview --report",
+    "lib": "vue-cli-service build --target lib --name DataVisioner src/index.js"
   },
   "dependencies": {
     "@sentry/browser": "^5.15.5",
