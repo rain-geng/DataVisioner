@@ -5,7 +5,8 @@ import store from '../store'
 
 let baseURL = process.env.VUE_APP_BASE_API
 if (process.env.NODE_ENV === 'production') {
-  baseURL = `//api.${location.host}/api`
+  //baseURL = `//api.${location.host}/api`
+  baseURL = `https://api.v11nlab.com/api`
 }
 
 const fetchInstance = axios.create({
